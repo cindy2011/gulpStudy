@@ -6,6 +6,8 @@ const uglify   = require('gulp-uglify');
 const imagemin = require('gulp-imagemin');
 const connect  = require("gulp-connect");
 const htmlmin  = require("gulp-htmlmin");
+var browserSync = require('browser-sync');
+var reload = browserSync.reload;
 
 //gulp是用来帮我们执行一些重复操作
 //如何定义一个任务
@@ -22,18 +24,18 @@ gulp.task('default',function(){
 	gulp.watch('src/*',['dest']);//第一个参数是任务发生的目录，第二个参数是任务的名字
 });
 
-gulp.task('connect', function() {
-	  connect.server({
-	    root: 'src',
-	    livereload: true
-	  });
-      gulp.watch(['src/**/*.*'], ['reload']);   
-});
+// gulp.task('connect', function() {
+// 	  connect.server({
+// 	    root: 'src',
+// 	    livereload: true
+// 	  });
+//       gulp.watch(['src/**/*.*'], ['reload']);   
+// });
 
-gulp.task('reload', function () {
-  gulp.src('src/**/*.*')
-    .pipe(connect.reload());
-});
+// gulp.task('reload', function () {
+//   gulp.src('src/**/*.*')
+//     .pipe(connect.reload());
+// });
 
  //合并js
 gulp.task("concat",function(){
@@ -73,4 +75,14 @@ gulp.task("htmlmin",function(){
     gulp.src('src/*.html')
         .pipe(htmlmin(options))
         .pipe(gulp.dest('dist'));
-})
+});
+// 起服务器监视文件改动并重新载入
+gulp.task('server', function() {
+  browserSync({
+    server: {
+      baseDir: 'src'
+    }
+  });
+
+  gulp.watch(['*.html', 'styles/**/*.css', 'scripts/**/*.js'], {cwd:"src"},reload);//options.cwd：输出文件夹的cwd，默认为：process.cwd()。
+});
