@@ -1,4 +1,5 @@
 'use strict';
+1
 //载入gulp核心包
 const   gulp   = require("gulp");
 const concat   = require('gulp-concat');
